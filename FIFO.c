@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 #include "FIFO.h"
 
 
 //Enqueue
- void FIFOq_enqueue (FIFOQueue_p queue, PCB pcb) {
+ void FIFOq_enqueue (FIFOq_p queue, PCB_p pcb) {
  	//create a new node
- 	Node* newNode = (Node*) malloc (sizeof(Node));
+ 	Node* newNode = malloc (sizeof(Node));
  	newNode->pcb = pcb; //assign pcb to new node
  	newNode->next = NULL;
 
@@ -22,12 +23,12 @@
  }
 
 //Dequeue
- PCB FIFOq_dequeue (FIFOQueue_p queue) {
+ PCB_p FIFOq_dequeue (FIFOq_p queue) {
 
      Node* head = queue->head; //returns the first pcb
-     PCB pcb;
+     PCB_p pcb;
 
-    if(isempty(queue)) {
+    if(FIFOq_is_empty(queue)) {
         printf("empty list. \n");
     } else {
         pcb = head->pcb;
@@ -45,13 +46,13 @@
  }
 
 //Peek
- PCB peek (FIFOQueue_p queue){
- 	PCB currPcb = queue->head->pcb;
+ PCB_p peek (FIFOq_p queue){
+ 	PCB_p currPcb = queue->head->pcb;
  	return currPcb;
  }
 
 //is empty
-int FIFOq_is_empty(FIFOQueue_p queue) {
+int FIFOq_is_empty(FIFOq_p queue) {
 
     if(queue->head == NULL) {
         return 1;
@@ -61,70 +62,53 @@ int FIFOq_is_empty(FIFOQueue_p queue) {
 }
 
 //displays pcb size if there's any queue (Did it to test)
- void FIFOq_toString (FIFOQueue_p queue) {
-
- 	printf("\nDisplay function: \n" );
-
+ char * FIFOq_toString (FIFOq_p queue) {
+	int count = queue->size;
+	char * string = calloc(120, 1);
+	char * nodeString = malloc(100);
+	char * pcbString = calloc(1, 5);
  	//if list is empty
- 	if(isempty(queue)) {
- 		printf("empty list. \n");
- 	} else { //else
-	 	PCB currPcb = queue->head->pcb;
- 		int size = queue->size;
- 		printf("queue size: %d \n", queue->size); //try with size
+ 	if(!FIFOq_is_empty(queue)) {
+		Node * node = queue->head;
  		int i;
- 		for(i = 0; i < size; i++) {
- 			if(i > 0)
- 				printf(", ");
- 			printf("PCB priority number: %d \n", currPcb.priority);
- 			queue->head = queue->head->next;
+ 		for(i = 0; i < count; i++) {
+ 			if(i > 0) {
+				strcat(nodeString, "->");
+			}
+			sprintf(pcbString, "P%d", i);
+			strcat(nodeString, pcbString);
+ 			node = node->next;
+			if (node == NULL) {
+				strcat(nodeString, "-*");
+			}
  		}
  	}
- 	printf("\n\n");
- }
-
-
- //creat new processess (create and fill in the contents of a PCB)
- PCB* createPcb(int prior) {
- 	PCB *newPcb;
- 	newPcb = (PCB *)malloc(sizeof(PCB));
- 	newPcb->priority = prior;
- 	return newPcb;
+	char * countString = calloc(1, 20);
+	sprintf(countString, "Q:Count=%d: ", count);
+	strcat(string, strcat(countString, nodeString));
+	
+	free(nodeString);
+	free(pcbString);
+	free(countString);
+	return string;
  }
 
 //creates and initialize queue.
-FIFOQueue_p FIFOq_contsruct() {
-	FIFOQueue_p queue = malloc(sizeof(FIFOQueue));
+FIFOq_p FIFOq_construct() {
+	FIFOq_p queue = malloc(sizeof(FIFOq));
 	queue->size = 0;
 	queue->head = NULL;
 	queue->tail = NULL;
 	return queue;
 }
 
-void FIFOq_destruct(FIFOQueue_p queue) {
-	
-}
-
-
-int main () {
-	Queue priorityQueue = initializeQueue();
-	int userprioNumb;
-
-	printf("Enter a priority number: \n");
-	scanf("%d", &userprioNumb);
-
-		if(userprioNumb >= 0) {
-			PCB *pcb = createPcb(userprioNumb);
-			priorityQueue.enqueue(&priorityQueue, *pcb);
-
-            printf("\nAfter Enqueue:");
-            priorityQueue.display(&priorityQueue);
-
-            printf("After Dequeue: \n");
-            priorityQueue.dequeue(&priorityQueue);
-
-
-		} else {
-			printf("program ends\n");
-		}
+void FIFOq_destruct(FIFOq_p queue) {
+	Node * node = queue->head;
+	while (node != NULL) {
+		free(node->pcb);
+		Node * toFree = node;
+		node = node->next;
+		free(toFree);
+	}
+	free(queue);
 }

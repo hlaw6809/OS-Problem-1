@@ -3,15 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
-
-/**
- *control_block
- */
-typedef struct PCB {
-   int priority;
-
-} PCB;
+#include "pcb.h"
 
 /**
  *The node struct:
@@ -19,34 +11,34 @@ typedef struct PCB {
  */
 
  typedef struct Node {
- 	PCB pcb;
- 	struct Node* next;
+ 	PCB_p pcb;
+ 	struct Node * next;
  } Node;
 
 
  /*
-  * FIFOQueue struct
+  * FIFOq struct
   */
 
- typedef struct FIFOQueue {
- 	Node* head;
- 	Node* tail;
- 	int size; //size of the FIFOQueue
- } FIFOQueue;
+ typedef struct fifoq{
+ 	Node * head;
+ 	Node * tail;
+ 	int size; //size of the FIFOq
+ } FIFOq;
  
- typedef FIFOQueue * FIFOQueue_p;
+ typedef FIFOq * FIFOq_p;
 
  /*
-  * FIFOQueue Methods
+  * FIFOq Methods
   */
 
- FIFOQueue_p FIFOq_contsruct ();
- void FIFOq_deconstruct (FIFOQueue_p);
- void FIFOq_enqueue (FIFOQueue_p, PCB);
- PCB FIFOq_dequeue (FIFOQueue_p);
- PCB peek (FIFOQueue_p);
- char * FIFOq_toString (FIFOQueue_p);
- int FIFOq_is_empty(FIFOQueue_p);
+ FIFOq_p FIFOq_construct ();
+ void FIFOq_destruct (FIFOq_p);
+ void FIFOq_enqueue (FIFOq_p, PCB_p);
+ PCB_p FIFOq_dequeue (FIFOq_p);
+ PCB_p peek (FIFOq_p);
+ char * FIFOq_toString (FIFOq_p);
+ int FIFOq_is_empty(FIFOq_p);
 
 
 #endif
