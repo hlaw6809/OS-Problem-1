@@ -35,15 +35,17 @@ void PCB_destruct (PCB_p pcbPointer) {
  *        successfully set pcb value to default. Otherwise, return 0 for failure.
  */
 int PCB_init (PCB_p pcbPointer) {
-	 int succeed = 0;
-	 if (pcbPointer != NULL) {
-			 pcbPointer->pid = 0;
-			 pcbPointer->state = new;
-			 pcbPointer->priority = 15;
-			 pcbPointer->pc = 0;
-			 succeed = 1;
-	 }
-	 return succeed;
+	static int pid;
+	int succeed = 0;
+	if (pcbPointer != NULL) {
+		pcbPointer->pid = pid;
+		pcbPointer->state = new;
+		pcbPointer->priority = 15;
+		pcbPointer->pc = 0;
+		succeed = 1;
+		pid++;
+	}
+	return succeed;
 }
 
 

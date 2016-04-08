@@ -55,12 +55,14 @@ int PriorityQueue_is_empty(PriorityQueue_p queue) {
 
 
 char * PriorityQueue_toString(PriorityQueue_p queue) {
-	char * string = calloc(500, 1);
+	char * string = calloc(15000, 1);
 	int i;
 	for (i = 0; i < PRIORITY_COUNT; i++) {
 		FIFOq_p fifoQueue = queue->priorities[i];
 		if (!FIFOq_is_empty(fifoQueue)) {
-			strcat(strcat(string, FIFOq_toString(fifoQueue)), "\n");
+			char * qString = malloc(1000);
+			sprintf(qString, "Q%d: %s\n", i, FIFOq_toString(fifoQueue));
+			strcat(string, qString);
 		}
 	}
 	return string;

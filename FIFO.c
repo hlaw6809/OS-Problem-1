@@ -17,9 +17,8 @@
  	} else {
  		queue->tail->next = newNode;
  	}
-
  	queue->tail = newNode;
- 	queue->size++;
+	queue->size++;
  }
 
 //Dequeue
@@ -64,9 +63,9 @@ int FIFOq_is_empty(FIFOq_p queue) {
 //displays pcb size if there's any queue (Did it to test)
  char * FIFOq_toString (FIFOq_p queue) {
 	int count = queue->size;
-	char * string = calloc(120, 1);
-	char * nodeString = malloc(100);
-	char * pcbString = calloc(1, 5);
+	char * string = calloc(1000, 1);
+	char * nodeString = calloc(600, 1);
+	char * pcbString = calloc(10, 1);
  	//if list is empty
  	if(!FIFOq_is_empty(queue)) {
 		Node * node = queue->head;
@@ -83,8 +82,8 @@ int FIFOq_is_empty(FIFOq_p queue) {
 			}
  		}
  	}
-	char * countString = calloc(1, 20);
-	sprintf(countString, "Q:Count=%d: ", count);
+	char * countString = calloc(1, 400);
+	sprintf(countString, "Count=%d: ", count);
 	strcat(string, strcat(countString, nodeString));
 	
 	free(nodeString);
